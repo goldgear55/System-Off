@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width">
+
+ <title>Servicio que procesa un formulario</title>
+
+</head>
+
+<body>
+
+ <h1>adivinansa</h1>
+
+ <form onsubmit="procesaForm(event) ">
+
+  <p>
+   <label>
+    Agua pasa por mi casa cate de mi corazon que es:
+    <!-- Como este input tiene name="saludo", su valor se recupera en el
+     servidor con leeTexto("saludo") -->
+    <input name="respuesta">
+   </label>
+  </p>
+
+
+  <p><button type="submit">enviar</button></p>
+
+ </form>
+
+ <script type="module">
+
+  import { exportaAHtml } from "./lib/js/exportaAHtml.js"
+  import { muestraError } from "./lib/js/muestraError.js"
+  import { submitForm } from "./lib/js/submitForm.js"
+
+  /**
+   * @param {Event} event
+   */
+  async function procesaForm(event) {
+   try {
+    const respuesta =
+     await submitForm(
+      "srv/procesa.php", event)
+    alert(respuesta.body)
+   } catch (error) {
+    muestraError(error)
+   }
+  }
+  exportaAHtml(procesaForm)
+
+ </script>
+
+</body>
+
+</html>
