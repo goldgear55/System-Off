@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Servicio que recibe y devuelve JSON</title>
+</head>
+<body>
+  <h1>Servicio que recibe y devuelve JSON</h1>
+
+  <!-- Un solo cuadro de texto para ingresar el nombre -->
+  <form id="saludoForm">
+    <label for="nombre">Nombre:</label>
+    <input type="text" id="nombre" name="nombre" placeholder="Escribe tu nombre" required>
+    <br><br>
+    <button type="submit">Enviar</button>
+  </form>
+
+  <script type="module">
+    import { exportaAHtml } from "./lib/js/exportaAHtml.js";
+    import { muestraError } from "./lib/js/muestraError.js";
+    import { enviaJson } from "./lib/js/enviaJson.js";
+
+    // Seleccionar el formulario
+    const formulario = document.getElementById('saludoForm');
+
+    formulario.addEventListener('submit', async function(event) {
+      event.preventDefault(); // Evita que el formulario se envíe de forma tradicional
+
+      try {
+        // Obtener el valor del nombre ingresado por el usuario
+        const nombre = document.getElementById('nombre').value;
+
+        // Crear el objeto JSON con un saludo fijo y el nombre del usuario
+        const datos = {
+          saludo: "System off da la bienvenida a:  ", // Saludo fijo
+          nombre: nombre   // Nombre ingresado por el usuario
+        };
+
+        // Enviar el JSON al servidor
+        const respuesta = await enviaJson("srv/json.php", datos);
+
+        // Mostrar la respuesta del servidor en una alerta
+        alert(respuesta.body.mensaje); // Acceder al campo 'mensaje'
+      } catch (error) {
+        muestraError(error); // Mostrar el error si ocurre
+      }
+    });
+
+    exportaAHtml(formulario);
+  </script>
+</body>
+</html>
